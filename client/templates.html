@@ -1,0 +1,70 @@
+<head>
+  <title>The HouseSitter</title>
+</head>
+
+<body>
+  <h1>The House-Sitter App</h1>
+  {{> selectHouse}}
+  {{> showHouse}}
+  {{> houseForm}}
+</body>
+
+<template name="selectHouse">
+	<select id="selectHouse">
+		<option value="" {{isSelected}}></option>
+		{{#each housesNameId}}
+			<option value="{{_id}}" {{isSelected}}>{{name}}</option>
+		{{/each}}
+	</select>
+</template>
+
+<template name="showHouse">
+	{{#with selectedHouse}}
+		<h2>Taking care of {{name}}'s house</h2>
+		<p>last visit: {{lastvisit}}</p>
+		{{#each plants}}
+			{{> plantDetails}}
+		{{/each}}
+		<button id="delete">Delete this house</button>
+		{{else}}
+		You need to select a house.
+	{{/with}}
+</template>
+
+<template name="houseForm">
+	{{#with selectedHouse}}
+		<h3>Edit {{name}}'s house</h3>
+		<form id="houseForm">
+			<fieldset id="house-name">
+				Name <input id="house-name" class="name" type="text" placeholder="Name" value="{{name}}"><br />
+			</fieldset>
+			<label>Plants</label>
+			{{#each withIndex plants}}
+				{{> plantFieldset}}
+			{{/each}}
+			<button class="addPlant">Add Plant</button>
+			<br/>
+			<button id="save-house" data-id="{{_id}}">Save House</button>
+		</form>
+	{{/with}}
+</template>
+
+<template name="plantFieldset">
+	<fieldset>
+		Color <input class="color" type="text" value="{{color}}" data-index="{{index}}">
+		Instructions <input class="instructions" type="text" value="{{instructions}}" data-index="{{index}}">
+		<button class="removePlant" data-index="{{index}}">Remove Plant</button>
+	</fieldset>
+</template>
+
+<template name="plantDetails">
+	<p>
+		<strong>Plant color:</strong> {{color}}
+	</p>
+	<p>
+		<strong>Instructions:</strong> {{instructions}}
+			<button class="water" data-id="{{../_id}}-{{color}}" {{isWatered}}>
+				Done
+			</button>
+	</p>
+</template>
