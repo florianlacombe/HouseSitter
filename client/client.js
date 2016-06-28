@@ -1,5 +1,8 @@
 LocalHouse = new Mongo.Collection(null);
 
+// test 
+
+
 var newHouse = {
 	name: '',
 	plants: [],
