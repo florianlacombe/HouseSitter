@@ -1,3 +1,5 @@
+// test
+
 Meteor.startup(function() {
 	if ( HousesCollection.find().count() === 0) {
 		var houses = [
