@@ -62,20 +62,6 @@ Template.plantDetails.helpers({
 });
 
 Template.houseForm.events({
-	'click button#saveHouse': function (evt) {
-		evt.preventDefault();
-		var houseName = $('input[id=house-name]').val();
-		var plantColor = $('input[id=plant-color]').val();
-		var plantInstructions = $('input[id=plant-instructions]').val();
-		Session.set('selectedHouseId', HousesCollection.insert({
-			name: houseName,
-			plants: [{
-				color: plantColor,
-				instructions: plantInstructions
-			}]
-		}));
-		$('input').val();
-	},
 	'keyup input#house-name': function (evt) {
 		evt.preventDefault();
 		var modifier = {$set: {'name': evt.currentTarget.value}};
@@ -89,13 +75,14 @@ Template.houseForm.events({
 	},
 	'click button#save-house': function (evt) {
 		evt.preventDefault();
+		console.log('click on save house')
 		var id = Session.get('selectedHouseId');
 		var modifier = {$set: {'lastsave': new Date()}};
 		updateLocalHouse(id, modifier);
 		// update the server database
 		HousesCollection.upsert(
 			{_id: id},
-			LocalHouse.findone(id)
+			LocalHouse.findOne(id)
 			);
 	},
 });
@@ -118,6 +105,7 @@ Template.plantFieldset.events({
 		console.log(plants);
 		plants.splice(index, 1);
 		var modifier = {$set: {'plants': plants}};
+		updateLocalHouse(Session.get('selectedHouseId'), modifier);
 	}
 });
 
